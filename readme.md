@@ -13,20 +13,20 @@ The project demonstrates API and UI automated testing, Page Object Model (POM), 
     - GitHub Actions
 
 ## Test Coverage
-    ### API Tests
-        - Login API
-        - Character API
-        - Battle API
-        - Status and health endpoints
-        - Positive and negative scenarios
+### API Tests
+    - Login API
+    - Character API
+    - Battle API
+    - Status and health endpoints
+    - Positive and negative scenarios
 
-    ### UI Tests
-        - Login
-        - Battle
-        - Shop / item purchasing
-        - Inventory
-        - Equipment management
-        - Positive and negative scenarios
+### UI Tests
+    - Login
+    - Battle
+    - Shop / item purchasing
+    - Inventory
+    - Equipment management
+    - Positive and negative scenarios
 
 ## Project Structure
 ```text
