@@ -1,0 +1,6 @@
+Flask
+pytest
+requests
+playwright
+pytest-html
+pytest-xdist

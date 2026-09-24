@@ -12,7 +12,8 @@ os.makedirs("traces", exist_ok=True)
 @pytest.fixture
 def page(request):
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        is_ci = os.getenv("CI") == "true"
+        browser = p.chromium.launch(headless=is_ci)
         context = browser.new_context() #test isolation แยกคุกกี้
         context.tracing.start(screenshots=True,snapshots=True,sources=True)
         page = context.new_page()
