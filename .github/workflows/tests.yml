@@ -32,3 +32,10 @@ jobs:
               run: |
                   mkdir -p reports
                   python -m pytest -v --html=reports/report.html --self-contained-html
+
+            - name: Upload test report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                name: phoenix-test-report
+                path: reports/report.html
