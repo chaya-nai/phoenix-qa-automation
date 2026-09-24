@@ -1,0 +1,30 @@
+[
+    {
+        "tc_id": "LOGIN_01",
+        "payload": {"username": "Nai","password": "9999"},
+        "expected_http_status": 200,
+        "expected_status": 200,
+        "expected_message": "Login Success"
+    },
+    {
+        "tc_id": "LOGIN_02",
+        "payload": {"username": "Nai","password": "1234"},
+        "expected_http_status": 401,
+        "expected_status": 401,
+        "expected_message": "Invalid Credentials"
+    },
+    {
+        "tc_id": "LOGIN_03",
+        "payload": {"username": "Nai"},
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Missing Credentials"
+    },
+    {
+        "tc_id": "LOGIN_04",
+        "payload": {"password": "9999"},
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Missing Credentials"
+    }
+]

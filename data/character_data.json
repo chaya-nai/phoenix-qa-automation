@@ -1,0 +1,11 @@
+[
+    {
+        "tc_id": "CHAR_01",
+        "method": "GET",
+        "endpoint": "/api/character",
+        "expected_http_status": 200,
+        "expected_status": 200,
+        "expected_name": "Phoenix",
+        "expected_level": 1
+    }
+]

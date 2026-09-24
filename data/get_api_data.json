@@ -1,0 +1,26 @@
+[
+    {
+        "tc_id": "STATUS_01",
+        "method": "GET",
+        "endpoint": "/api/status",
+        "expected_http_status": 200,
+        "expected_status": 200,
+        "expected_message": "Server is running"
+    },
+    {
+        "tc_id": "ERROR_01",
+        "method": "GET",
+        "endpoint": "/api/error",
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Bad Request"
+    },
+    {
+        "tc_id": "HEALTH_01",
+        "method": "GET",
+        "endpoint": "/api/health",
+        "expected_http_status": 503,
+        "expected_status": 503,
+        "expected_message": "Service Unavailable"
+    }
+]

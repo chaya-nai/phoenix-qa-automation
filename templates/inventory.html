@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Phoenix Arena - Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🔥
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    PHOENIX
+                </div>
+
+                <div class="brand-subtitle">
+                    TEST ARENA
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a href="/character">
+                ◈ Character
+            </a>
+
+            <a href="/character">
+                ⚔ Battle
+            </a>
+
+            <a href="/shop">
+                ◇ Shop
+            </a>
+
+            <a href="/inventory" class="active">
+                ▣ Inventory
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <div>
+
+                <h1 class="page-title">
+                    Inventory
+                </h1>
+
+                <div class="page-subtitle">
+                    Manage your equipment and prepare for battle.
+                </div>
+
+            </div>
+
+
+            <div class="coin-badge">
+
+                <span class="coin-icon">
+                    ●
+                </span>
+
+                <span id="coin">
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CURRENTLY EQUIPPED -->
+        <section class="card">
+
+            <h2>
+                Currently Equipped
+            </h2>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <span class="stat-label">
+                        Outfit
+                    </span>
+
+                    <span
+                        id="equipped-outfit"
+                        class="stat-value"
+                    >
+                        Loading...
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="equip-result"
+                class="result"
+            ></div>
+
+        </section>
+
+
+        <!-- INVENTORY ITEMS -->
+        <section class="card">
+
+            <h2>
+                Equipment Inventory
+            </h2>
+
+
+            <div
+                id="inventory-list"
+                class="shop-grid"
+            >
+                Loading inventory...
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    async function loadInventory() {
+
+        /*
+         * LOAD CHARACTER
+         */
+
+        const characterResponse =
+            await fetch("/api/character");
+
+        const characterBody =
+            await characterResponse.json();
+
+
+        document
+            .getElementById("coin")
+            .textContent =
+                characterBody.data.coin;
+
+
+        /*
+         * LOAD INVENTORY
+         */
+
+        const response =
+            await fetch("/api/inventory");
+
+        const body =
+            await response.json();
+
+
+        const inventoryList =
+            document.getElementById(
+                "inventory-list"
+            );
+
+
+        const equippedOutfit =
+            document.getElementById(
+                "equipped-outfit"
+            );
+
+
+        /*
+         * CURRENT EQUIPMENT
+         */
+
+        equippedOutfit.textContent =
+            body.data.equipped_outfit ?? "None";
+
+
+        /*
+         * CLEAR OLD INVENTORY UI
+         */
+
+        inventoryList.innerHTML = "";
+
+
+        /*
+         * EMPTY INVENTORY
+         */
+
+        if (body.data.items.length === 0) {
+
+            inventoryList.innerHTML = `
+
+                <div class="shop-item">
+
+                    <div class="item-image">
+                        🎒
+                    </div>
+
+                    <h2>
+                        Inventory Empty
+                    </h2>
+
+                    <p class="item-description">
+                        Purchase equipment from
+                        the shop before equipping it.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        /*
+         * INVENTORY ITEMS
+         */
+
+        body.data.items.forEach(item => {
+
+            const itemElement =
+                document.createElement("div");
+
+
+            /*
+             * shop-item = styling
+             * inventory-item = automation selector
+             */
+
+            itemElement.className =
+                "shop-item inventory-item";
+
+
+            let icon = "🛡️";
+
+
+            if (item === "Leather Armor") {
+                icon = "🥋";
+            }
+
+
+            if (item === "Wooden Armor") {
+                icon = "🪵";
+            }
+
+
+            itemElement.innerHTML = `
+
+                <div class="item-image">
+                    ${icon}
+                </div>
+
+                <h2>
+                    ${item}
+                </h2>
+
+                <p class="item-description">
+                    Equipment ready to be equipped.
+                </p>
+
+                <button
+                    class="equip-button btn btn-primary btn-wide"
+                    data-item="${item}"
+                >
+                    Equip
+                </button>
+
+            `;
+
+
+            inventoryList
+                .appendChild(itemElement);
+
+        });
+
+    }
+
+
+
+    async function equipItem(item) {
+
+        const response =
+            await fetch(
+                "/api/inventory/equip",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        item: item
+                    })
+
+                }
+            );
+
+
+        const body =
+            await response.json();
+
+
+        document
+            .getElementById("equip-result")
+            .textContent =
+                body.message;
+
+
+        /*
+         * SUCCESS:
+         * refresh inventory state
+         */
+
+        if (response.ok) {
+
+            await loadInventory();
+
+        }
+
+    }
+
+
+
+    /*
+     * EVENT DELEGATION
+     *
+     * Equip buttons are created dynamically
+     * after API response.
+     */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target
+                    .classList
+                    .contains("equip-button")
+            ) {
+
+                const item =
+                    event.target.dataset.item;
+
+
+                equipItem(item);
+
+            }
+
+        }
+    );
+
+
+
+    /*
+     * INITIAL LOAD
+     */
+
+    loadInventory();
+
+</script>
+
+</body>
+
+</html>

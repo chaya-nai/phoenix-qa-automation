@@ -1,0 +1,26 @@
+[
+    {
+        "tc_id": "UI_LOGIN_01",
+        "username": "Nai",
+        "password": "9999",
+        "expected_message": "200 Login Success"
+    },
+    {
+        "tc_id": "UI_LOGIN_02",
+        "username": "Nai",
+        "password": "1234",
+        "expected_message": "401 Invalid Credentials"
+    },
+    {
+        "tc_id": "UI_LOGIN_03",
+        "username": "Nai",
+        "password": "",
+        "expected_message": "401 Invalid Credentials"
+    },
+    {
+        "tc_id": "UI_LOGIN_04",
+        "username": "",
+        "password": "9999",
+        "expected_message": "401 Invalid Credentials"
+    }
+]

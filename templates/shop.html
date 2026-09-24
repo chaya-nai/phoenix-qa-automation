@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Phoenix Arena - Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🔥
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    PHOENIX
+                </div>
+
+                <div class="brand-subtitle">
+                    TEST ARENA
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a href="/character">
+                ◈ Character
+            </a>
+
+            <a href="/character">
+                ⚔ Battle
+            </a>
+
+            <a href="/shop" class="active">
+                ◇ Shop
+            </a>
+
+            <a href="/inventory">
+                ▣ Inventory
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <div>
+
+                <h1 class="page-title">
+                    Equipment Shop
+                </h1>
+
+                <div class="page-subtitle">
+                    Upgrade your equipment before entering battle.
+                </div>
+
+            </div>
+
+
+            <div class="coin-badge">
+
+                <span class="coin-icon">
+                    ●
+                </span>
+
+                <span id="coin">
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SHOP ITEMS -->
+        <div class="shop-grid">
+
+
+            <!-- IRON ARMOR -->
+            <div class="shop-item">
+
+                <div class="item-image">
+                    🛡️
+                </div>
+
+                <h2>
+                    Iron Armor
+                </h2>
+
+                <p class="item-description">
+                    Heavy armor forged for warriors
+                    who prefer defense over speed.
+                </p>
+
+
+                <div class="price-row">
+
+                    <span>
+                        ●
+                    </span>
+
+                    <span class="item-price">
+                        300
+                    </span>
+
+                    <span>
+                        Coin
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="buy-button btn btn-primary btn-wide"
+                    data-item="Iron Armor"
+                >
+                    Buy
+                </button>
+
+            </div>
+
+
+            <!-- LEATHER ARMOR -->
+            <div class="shop-item">
+
+                <div class="item-image">
+                    🥋
+                </div>
+
+                <h2>
+                    Leather Armor
+                </h2>
+
+                <p class="item-description">
+                    Lightweight armor designed
+                    for agile fighters.
+                </p>
+
+
+                <div class="price-row">
+
+                    <span>
+                        ●
+                    </span>
+
+                    <span class="item-price">
+                        150
+                    </span>
+
+                    <span>
+                        Coin
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="buy-button btn btn-primary btn-wide"
+                    data-item="Leather Armor"
+                >
+                    Buy
+                </button>
+
+            </div>
+
+
+            <!-- WOODEN ARMOR -->
+            <div class="shop-item">
+
+                <div class="item-image">
+                    🪵
+                </div>
+
+                <h2>
+                    Wooden Armor
+                </h2>
+
+                <p class="item-description">
+                    Basic protection for warriors
+                    beginning their journey.
+                </p>
+
+
+                <div class="price-row">
+
+                    <span>
+                        ●
+                    </span>
+
+                    <span class="item-price">
+                        100
+                    </span>
+
+                    <span>
+                        Coin
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="buy-button btn btn-primary btn-wide"
+                    data-item="Wooden Armor"
+                >
+                    Buy
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PURCHASE RESULT -->
+        <div
+            id="purchase-result"
+            class="purchase-result"
+        ></div>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    async function loadCharacter() {
+
+        const response =
+            await fetch("/api/character");
+
+        const body =
+            await response.json();
+
+
+        document
+            .getElementById("coin")
+            .textContent =
+                body.data.coin;
+
+    }
+
+
+    document
+        .querySelectorAll(".buy-button")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const item =
+                        button.dataset.item;
+
+
+                    const response =
+                        await fetch(
+                            "/api/shop/buy",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    item: item
+                                })
+
+                            }
+                        );
+
+
+                    const body =
+                        await response.json();
+
+
+                    document
+                        .getElementById("purchase-result")
+                        .textContent =
+                            body.message;
+
+
+                    await loadCharacter();
+
+                }
+            );
+
+        });
+
+
+    loadCharacter();
+
+</script>
+
+</body>
+
+</html>

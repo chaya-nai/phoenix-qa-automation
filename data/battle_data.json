@@ -1,0 +1,47 @@
+[
+    {
+        "tc_id": "BATTLE_01",
+        "method": "POST",
+        "endpoint": "/api/battle",
+        "payload": {"monster": "Slime"},
+        "expected_http_status": 200,
+        "expected_status": 200,
+        "expected_message": "Battle Won"
+    },
+    {
+        "tc_id": "BATTLE_02",
+        "method": "POST",
+        "endpoint": "/api/battle",
+        "payload": {"monster": ""},
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Invalid Monster"
+    },
+    {
+        "tc_id": "BATTLE_03",
+        "method": "POST",
+        "endpoint": "/api/battle",
+        "payload": {"monster": null},
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Invalid Monster"
+    },
+    {
+        "tc_id": "BATTLE_04",
+        "method": "POST",
+        "endpoint": "/api/battle",
+        "payload": {},
+        "expected_http_status": 400,
+        "expected_status": 400,
+        "expected_message": "Missing Monster"
+    },
+    {
+        "tc_id": "BATTLE_05",
+        "method": "POST",
+        "endpoint": "/api/battle",
+        "payload": {"monster": "Dragon"},
+        "expected_http_status": 404,
+        "expected_status": 404,
+        "expected_message": "Monster Not Found"
+    }
+]

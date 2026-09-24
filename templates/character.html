@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Phoenix Arena - Character</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🔥
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    PHOENIX
+                </div>
+
+                <div class="brand-subtitle">
+                    TEST ARENA
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a href="/character" class="active">
+                ◈ Character
+            </a>
+
+            <a href="/character">
+                ⚔ Battle
+            </a>
+
+            <a href="/shop">
+                ◇ Shop
+            </a>
+
+            <a href="/inventory">
+                ▣ Inventory
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <div>
+
+                <h1 class="page-title">
+                    Character
+                </h1>
+
+                <div class="page-subtitle">
+                    Your fighter in the Phoenix Arena.
+                </div>
+
+            </div>
+
+
+            <div class="coin-badge">
+
+                <span class="coin-icon">
+                    ●
+                </span>
+
+                <span id="coin">
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHARACTER CONTENT -->
+        <div class="character-layout">
+
+
+            <!-- CHARACTER -->
+            <section class="card character-display">
+
+                <div class="character-avatar">
+                    🔥
+                </div>
+
+                <div
+                    id="character-name"
+                    class="character-name"
+                >
+                    Loading...
+                </div>
+
+                <div class="character-class">
+                    PHOENIX WARRIOR
+                </div>
+
+            </section>
+
+
+            <!-- STATS -->
+            <section class="card">
+
+                <h2>
+                    Character Stats
+                </h2>
+
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <span class="stat-label">
+                            Level
+                        </span>
+
+                        <span
+                            id="level"
+                            class="stat-value"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <span class="stat-label">
+                            Coin
+                        </span>
+
+                        <span
+                            id="character-coin"
+                            class="stat-value"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <span class="stat-label">
+                            Equipped
+                        </span>
+
+                        <span
+                            id="equipped-outfit"
+                            class="stat-value"
+                        >
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <span class="stat-label">
+                            Status
+                        </span>
+
+                        <span class="stat-value">
+                            Ready
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BATTLE -->
+                <div class="action-area">
+
+                    <button
+                        id="battle-button"
+                        class="btn btn-primary btn-wide"
+                    >
+                        Battle
+                    </button>
+
+
+                    <div
+                        id="battle-result"
+                        class="result"
+                    ></div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    async function loadCharacter() {
+
+        const response =
+            await fetch("/api/character");
+
+        const body =
+            await response.json();
+
+
+        document
+            .getElementById("character-name")
+            .textContent =
+                body.data.name;
+
+
+        document
+            .getElementById("level")
+            .textContent =
+                body.data.level;
+
+
+        document
+            .getElementById("coin")
+            .textContent =
+                body.data.coin;
+
+
+        document
+            .getElementById("character-coin")
+            .textContent =
+                body.data.coin;
+
+
+        document
+            .getElementById("equipped-outfit")
+            .textContent =
+                body.data.equipped_outfit ?? "None";
+
+    }
+
+
+    document
+        .getElementById("battle-button")
+        .addEventListener(
+            "click",
+            async () => {
+
+                const response =
+                    await fetch(
+                        "/api/battle",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                monster: "Slime"
+                            })
+
+                        }
+                    );
+
+
+                const body =
+                    await response.json();
+
+
+                if (response.ok) {
+
+                    document
+                        .getElementById("battle-result")
+                        .textContent =
+                            `Battle Won - Reward: ${body.reward} Coin`;
+
+
+                    await loadCharacter();
+
+                }
+
+            }
+        );
+
+
+    loadCharacter();
+
+</script>
+
+</body>
+
+</html>
