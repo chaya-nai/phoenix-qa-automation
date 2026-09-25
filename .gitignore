@@ -4,6 +4,9 @@ __pycache__/
 .venv/
 venv/
 
+.pytest_cache/
+
 reports/
 screenshots/
 traces/
+trace.zip

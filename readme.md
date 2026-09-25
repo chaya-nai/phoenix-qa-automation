@@ -125,12 +125,24 @@ python -m pytest -v --html=reports/report.html --self-contained-html
 ```
 
 ## Parallel Execution
-Tests that do not share test data can be executed in parallel using pytest-xdist.
+
+This project supports parallel test execution using pytest-xdist.
+
+However, some tests share mutable test data such as character coins and inventory. Running the entire test suite in parallel may cause race conditions and inconsistent results.
+
+For reliable full regression testing, run the test suite serially:
+
+```bash
+python -m pytest -v
+```
+
+Parallel execution can be used for tests with isolated test data:
 
 ```bash
 python -m pytest -v -n 2
 ```
-Tests that share or modify the same test data should be executed serially to avoid race conditions.
+
+For production-scale parallel execution, test data should be isolated per test or per worker to prevent shared-state conflicts.
 
 ## Continuous Integration
 This project uses GitHub Actions for Continuous Integration.
